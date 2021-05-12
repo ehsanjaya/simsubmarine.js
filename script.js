@@ -56,33 +56,6 @@ document.addEventListener("keydown", function(event){
     playerSpeed.innerHTML = speed + " knot/h";
 });
 
-var hammer = new Hammer(container);
-hammer.on("panleft", function(ev) {
-    shiftStones("left");
-});
-
-hammer.on("panRight", function(ev) {
-    shiftStones("right");
-});
-
-hammer.on("panUp", function(ev) {
-    if(speed < 14)
-    {
-        speed++;
-    }
-});
-
-hammer.on("panDown", function(ev) {
-    if(speed > 4)
-    {
-        speed--;
-    }
-});
-
-hammer.on("tap", function(ev) {
-    createTorpedo();
-});
-
 function createTorpedo() {
     var torpedo = document.createElement("div");
     container.append(torpedo);
