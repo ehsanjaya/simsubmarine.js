@@ -27,12 +27,7 @@ document.addEventListener("keydown", function(event){
 
     if(event.keyCode == 32)
     {
-        var torpedo = document.createElement("div");
-        container.append(torpedo);
-        torpedo.className = "torpedo"; 
-        var width = playerWidth / 2;
-        torpedo.style.left = playerLeft + width - 80 + "px";
-        torpedo.style.top = playerTop + "px";
+        createTorpedo();
     }
     else if(event.keyCode == 38)
     {
@@ -48,24 +43,73 @@ document.addEventListener("keydown", function(event){
             speed--;
         }
     }
+    else if(event.keyCode == 37)
+    {
+        shiftStones("left");
+    }
+    else if(event.keyCode == 39)
+    {
+        shiftStones("right");
+    }
+
     
     playerSpeed.innerHTML = speed + " knot/h";
+});
+
+var hammer = new Hammer(container);
+hammer.on("panleft", function(ev) {
+    shiftStones("left");
+});
+
+hammer.on("panRight", function(ev) {
+    shiftStones("right");
+});
+
+hammer.on("panUp", function(ev) {
+    if(speed < 14)
+    {
+        speed++;
+    }
+});
+
+hammer.on("panDown", function(ev) {
+    if(speed > 4)
+    {
+        speed--;
+    }
+});
+
+hammer.on("tap", function(ev) {
+    createTorpedo();
+});
+
+function createTorpedo() {
+    var torpedo = document.createElement("div");
+    container.append(torpedo);
+    torpedo.className = "torpedo"; 
+    var width = playerWidth / 2;
+    torpedo.style.left = playerLeft + width - 80 + "px";
+    torpedo.style.top = playerTop + "px";
+}
+
+function shiftStones(direction) {
     var stones = document.getElementsByClassName("stone");
-    for(var i = 0;i < stones.length;i++)
+    var shift = 0;
+    if (direction == "left") {
+        shift = 27;
+    }
+    else if (direction == "right") {
+        shift = -27
+    }
+    
+    for (var i = 0; i < stones.length; i++)
     {
         var stone = stones[i];
         var stoneLeft = stone.offsetLeft;
-        if(event.keyCode == 37)
-        {
-            stoneLeft+=27;
-        }
-        else if(event.keyCode == 39)
-        {
-            stoneLeft-=27;
-        }
+        stoneLeft += shift;
         stone.style.left = stoneLeft + "px";
     }
-});
+}
 
 var createStoneInterval = setInterval(function(){
     if(!pause)
